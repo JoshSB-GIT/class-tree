@@ -83,13 +83,13 @@ print(
 # Eliminar filas repetidas
 wine_data.drop_duplicates(inplace=True)
 # GRAFICO para variables
-# principal_graph(wine_data, category_cols)
+principal_graph(wine_data, category_cols)
 
 # Graficar subniveles de cada variable
-# sub_level_graph(wine_data, category_cols)
+sub_level_graph(wine_data, category_cols)
 
 # Histograma
-# histo_graph(wine_data, category_cols)
+histo_graph(wine_data, category_cols)
 
 # Barras calidad vs variable
 # bar_diagram_graph('fixed acidity', data_frame=wine_data)
