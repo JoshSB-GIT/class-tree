@@ -10,10 +10,8 @@ class Configuration:
 
 class DevelopmentConfig(Configuration):
     DEBUG = True
-    # MYSQL_HOST = os.getenv('MYSQL_HOST')
-    # MYSQL_USER = os.getenv('MYSQL_USER')
-    # MYSQL_PASS = ''  # os.getenv('MYSQL_PASS')
-    # MYSQL_DB = os.getenv('MYSQL_DB')
+    supabase_url = os.getenv('URL_API')
+    supabase_key = os.getenv('SERVICE_ROLE')
 
 
 config = {
