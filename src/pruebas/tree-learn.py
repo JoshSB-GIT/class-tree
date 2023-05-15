@@ -10,13 +10,9 @@ from sklearn import metrics
 
 
 def principal_graph(data_frame, category_cols):
-    fig, ax = plt.subplots(nrows=6, ncols=1, figsize=(8, 30))
-    fig.subplots_adjust(hspace=0.5)
+    sns.boxplot(data=data_frame[category_cols])
 
-    for i, col in enumerate(category_cols):
-        sns.boxplot(x=col, data=data_frame, ax=ax[i])
-        ax[i].set_title(col)
-
+    plt.savefig('./src/assets/img/imgcaja-bigote.png')
     return plt.show()
 
 
@@ -83,13 +79,13 @@ print(
 # Eliminar filas repetidas
 wine_data.drop_duplicates(inplace=True)
 # GRAFICO para variables
-principal_graph(wine_data, category_cols)
+principal_graph(wine_data, 'pH')
 
 # Graficar subniveles de cada variable
-sub_level_graph(wine_data, category_cols)
+# sub_level_graph(wine_data, category_cols)
 
 # Histograma
-histo_graph(wine_data, category_cols)
+# histo_graph(wine_data, category_cols)
 
 # Barras calidad vs variable
 # bar_diagram_graph('fixed acidity', data_frame=wine_data)
