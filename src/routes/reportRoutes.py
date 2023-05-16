@@ -3,7 +3,8 @@ from flask_cors import cross_origin
 from flask_login import login_required
 
 csv_report = Blueprint('csv_report', __name__)
-
+# learningmachine123
+# ufvvcvghcvryxhpl
 
 @cross_origin
 @csv_report.route('/generate_report', methods=['POST'])

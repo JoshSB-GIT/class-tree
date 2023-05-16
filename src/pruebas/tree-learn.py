@@ -38,7 +38,7 @@ def histo_graph(data_frame, category_cols):
 def bar_diagram_graph(vs_var: str, data_frame):
     plt.figure(figsize=(10, 6))
     sns.barplot(x='quality', y=vs_var, data=data_frame)
-
+    print(data_frame[vs_var])
     return plt.show()
 
 
@@ -88,7 +88,7 @@ principal_graph(wine_data, 'pH')
 # histo_graph(wine_data, category_cols)
 
 # Barras calidad vs variable
-# bar_diagram_graph('fixed acidity', data_frame=wine_data)
+bar_diagram_graph('fixed acidity', data_frame=wine_data)
 # bar_diagram_graph('volatile acidity', data_frame=wine_data)
 # bar_diagram_graph('citric acid', data_frame=wine_data)
 # bar_diagram_graph('residual sugar', data_frame=wine_data)
@@ -160,17 +160,21 @@ print(
     '------------------------------------------------------')
 clf.fit(X_train, y_train)
 y_pred = clf.predict(X_test)
+print(
+    '------------------------ypred-------------------------')
 print(y_pred)
 print(
-    '------------------------------------------------------')
+    '------------------------ytest-------------------------')
 print(y_test)
 
 cm = confusion_matrix(y_test, y_pred)
+print(
+    '--------------------confusion_matrix------------------')
 print(cm)
 
 print(
     '------------------------------------------------------')
 print("Precisión: ", metrics.accuracy_score(y_test, y_pred))
-print("F1 Score: ", metrics.f1_score(y_test, y_pred, average='weighted'))
-print("ROC: ", metrics.roc_auc_score(y_test, y_pred))
+print("F1 Record: ", metrics.f1_score(y_test, y_pred, average='weighted'))
+print("Rendimiento: ", metrics.roc_auc_score(y_test, y_pred))
 print("Recall: ", metrics.recall_score(y_test, y_pred, average='weighted'))
