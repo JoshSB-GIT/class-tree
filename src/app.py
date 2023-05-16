@@ -1,6 +1,7 @@
+from routes.reportRoutes import csv_report
 from flask import Flask, jsonify, redirect, request, url_for
 from flask_cors import CORS, cross_origin
-from flask_login import current_user, login_required, login_user, logout_user
+from flask_login import login_required, login_user, logout_user
 from flask_login import LoginManager
 import supabase_py as spb
 from config.config import config
@@ -8,6 +9,9 @@ from models.userModel import User
 
 app = Flask(__name__)
 CORS(app)
+
+app.register_blueprint(csv_report)
+
 supabase = (
     spb.create_client(config['development'].supabase_url,
                       config['development'].supabase_key))
@@ -17,11 +21,8 @@ login_manager.init_app(app)
 
 @cross_origin
 @app.route('/')
-@login_required
 def home():
-    user_id = current_user.id
-    return jsonify({'message': 'welcome home!',
-                    'data': str(user_id)})
+    return jsonify({'message': 'welcome home!'})
 
 
 @login_manager.user_loader
@@ -48,6 +49,21 @@ def login():
 
     return jsonify({'message': 'HELLO!!'})
 
+
+@app.route('/create_user', methods=['POST'])
+@login_required
+def create_user():
+    email = request.json['email']
+    password = request.json['password']
+
+    user = User(email=email, password=password)
+
+    response = supabase.auth.sign_up(email=user.email,
+                                     password=user.password)
+    if response['status_code'] == 200:
+        return jsonify({'message': 'User created!'})
+    else:
+        return jsonify({'error': str(response['msg'])})
 
 @app.route('/logout')
 @login_required
