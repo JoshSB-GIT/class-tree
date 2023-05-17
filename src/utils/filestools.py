@@ -2,7 +2,7 @@ import os
 import random
 import string
 
-class CsvTools():
+class FilesTools():
     def generate_file_hash(self, file_name):
         name, extention = os.path.splitext(file_name)
         

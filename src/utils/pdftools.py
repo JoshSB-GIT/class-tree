@@ -9,6 +9,12 @@ class PdfTools(FPDF):
         'unit': 'mm',
         'format': 'A4'
     }
+    
+    PDF_HEADER = {
+        'logo': './src/assets/img/logo-03.jpg',
+        'title': 'Reporte',
+        ''
+    }
 
     def pdf_header(self) -> None:
         self.image('./src/assets/img/logo-03.jpg',
