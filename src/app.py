@@ -1,4 +1,5 @@
 from routes.reportRoutes import csv_report
+from routes.emailRoutes import mail
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
 from flask_login import current_user, login_required, login_user, logout_user
@@ -11,6 +12,7 @@ app = Flask(__name__)
 CORS(app)
 
 app.register_blueprint(csv_report)
+app.register_blueprint(mail)
 
 supabase: Client = (
     create_client(config['development'].supabase_url,
