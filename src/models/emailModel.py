@@ -3,7 +3,7 @@ class emailModel():
         self._email_to = email_to
         self._subject = subject
         self._text = text
-        
+
     @property
     def email_to(self):
         return self._email_to

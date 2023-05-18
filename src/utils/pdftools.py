@@ -165,3 +165,55 @@ class PdfTools(FPDF):
         if paragraph != '':
             self.set_font('Arial', '', paragraph_size)
             self.multi_cell(0, 10, txt=paragraph, align='J')
+
+    def section_with_table(self, title: str = '', table_data: list = '',
+                           title_size: int = 12, table_font_size=8):
+        # Título de la sección
+        if title != '':
+            self.set_font('Arial', 'B', title_size)
+            self.cell(0, 10, title, ln=True, align='J')
+            self.ln(5)
+
+        if len(table_data) > 2:
+            # Crear la tabla
+            self.set_font('Arial', '', table_font_size)
+            table_width = 160  # Ancho de la tabla
+            # Ancho de cada columna
+            col_width = table_width / len(table_data[0])
+            cell_height = self.font_size + 2  # Alto de cada celda
+
+            # Centrar la tabla en la página
+            table_x = (self.w - table_width) / 2
+            table_y = self.y
+
+            self.set_text_color(255, 255, 255)
+
+            # Dibujar los encabezados de las columnas
+            for col in table_data[0]:
+                self.cell(col_width, cell_height, col,
+                          border=1, align='C', fill=True)
+            self.ln()
+
+            self.set_text_color(0)
+
+            # Dibujar los datos de la tabla
+            for row in table_data[1:]:
+                for col in row:
+                    self.cell(col_width, cell_height, col, border=1, align='C')
+                self.ln()
+
+            # Establecer la posición del puntero para la siguiente sección
+            self.set_xy(table_x, table_y + len(table_data) * cell_height)
+
+
+_pdf = PdfTools(orientation='P', unit='mm', format='A4')
+_pdf.add_page()
+_pdf.section_with_table(
+    'hola que hace',
+    [['hola', 'hola', 'hola', 'hola', 'hola', 'hola', 'hola'],
+     ['hola', 'hola', 'hola', 'hola', 'hola', 'hola', 'hola'],
+     ['hola', 'hola', 'hola', 'hola', 'hola', 'hola', 'hola'],
+     ['hola', 'hola', 'hola', 'hola', 'hola', 'hola', 'hola'],
+     ['hola', 'hola', 'hola', 'hola', 'hola', 'hola', 'hola']]
+)
+_pdf.output('src/temp/prueba.pdf')

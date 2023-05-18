@@ -7,7 +7,6 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import confusion_matrix
 from sklearn import metrics
-from sklearn import tree
 
 
 def principal_graph(data_frame, category_cols):
@@ -80,7 +79,7 @@ print(
 # Eliminar filas repetidas
 wine_data.drop_duplicates(inplace=True)
 # GRAFICO para variables
-principal_graph(wine_data, 'pH')
+# principal_graph(wine_data, 'pH')
 
 # Graficar subniveles de cada variable
 # sub_level_graph(wine_data, category_cols)
@@ -89,7 +88,7 @@ principal_graph(wine_data, 'pH')
 # histo_graph(wine_data, category_cols)
 
 # Barras calidad vs variable
-bar_diagram_graph('fixed acidity', data_frame=wine_data)
+# bar_diagram_graph('fixed acidity', data_frame=wine_data)
 # bar_diagram_graph('volatile acidity', data_frame=wine_data)
 # bar_diagram_graph('citric acid', data_frame=wine_data)
 # bar_diagram_graph('residual sugar', data_frame=wine_data)
@@ -116,7 +115,8 @@ print(
 
 print(
     '\n------------------- value_counts() -------------------')
-print(wine_data['quality'].value_counts())
+print(wine_data['quality'].value_counts(), '\nc: ',
+      wine_data['quality'].value_counts()[1])
 print(
     '------------------------------------------------------')
 
@@ -180,8 +180,8 @@ print("F1 Record: ", metrics.f1_score(y_test, y_pred, average='weighted'))
 print("Rendimiento: ", metrics.roc_auc_score(y_test, y_pred))
 print("Recall: ", metrics.recall_score(y_test, y_pred, average='weighted'))
 
-plt.figure(figsize=(12, 10))
-_ = tree.plot_tree(
-    clf, feature_names=wine_data.columns[:-1],
-    class_names=['0', '1'], filled=True)
-plt.show()
+# plt.figure(figsize=(12, 10))
+# _ = tree.plot_tree(
+#     clf, feature_names=wine_data.columns[:-1],
+#     class_names=['0', '1'], filled=True)
+# plt.show()

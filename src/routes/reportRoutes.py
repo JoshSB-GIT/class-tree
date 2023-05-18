@@ -37,9 +37,9 @@ def save_img(name: str) -> str:
 
 
 @cross_origin
-@csv_report.route('/generate_report', methods=['POST'])
+@csv_report.route('/generate_pdf', methods=['POST'])
 @login_required
-def generate_report_csv():
+def generate_pdf_report():
     if request.method == 'POST':
         path_temp = './src/temp/'
         try:
@@ -53,6 +53,12 @@ def generate_report_csv():
                                     skiprows=0, index_col=False)
 
             wine_data.dropna(inplace=True)
+
+            unique_vals_list = []
+            for col in category_cols:
+                unique_vals_list.append(
+                    f"{col}: {wine_data[col].nunique()} sublevels")
+
             wine_data.drop_duplicates(inplace=True)
 
             boxplot_routes = []
@@ -130,17 +136,93 @@ def generate_report_csv():
             _pdf.add_page()
             _pdf.text_section(title='Variables de importancia',
                               paragraph=vars.paragraph.format(
-                                    str(conf_matrix).replace('\n', ''),
-                                    precision,
-                                    f1_score,
-                                    roc_score,
-                                    recall_score))
+                                  str(conf_matrix).replace('\n', ''),
+                                  precision, f1_score, roc_score,
+                                  recall_score,
+                                  str(wine_data['quality'].value_counts()[1]),
+                                  str(wine_data['quality'].value_counts()[0]),
+                                  str(unique_vals_list[0]),
+                                  str(unique_vals_list[1]),
+                                  str(unique_vals_list[2]),
+                                  str(unique_vals_list[3]),
+                                  str(unique_vals_list[4]),
+                                  str(unique_vals_list[5])))
             now = datetime.now()
             now = now.strftime("%d-%m-%Y")
             new_pdf_name = _filetools.generate_file_hash(f'report-{now}.pdf')
             _pdf.output(_path_temp+new_pdf_name)
 
             return send_file('temp\\'+new_pdf_name, as_attachment=True)
+
+        except Exception as ex:
+            return jsonify({'error': str(ex)})
+
+
+@cross_origin
+@csv_report.route('/generate_report', methods=['POST'])
+@login_required
+def generate_report_csv():
+    if request.method == 'POST':
+        path_temp = './src/temp/'
+        try:
+            file = request.files['wine_red']
+
+            new_filename = _filetools.generate_file_hash(file.filename)
+            save_temp = os.path.join(path_temp, new_filename)
+            file.save(save_temp)
+            wine_data = pd.read_csv(save_temp,
+                                    sep=';', engine='python',
+                                    skiprows=0, index_col=False)
+
+            wine_data.dropna(inplace=True)
+
+            unique_vals_list = []
+            for col in category_cols:
+                unique_vals_list.append(
+                    f"{col}: {wine_data[col].nunique()} sublevels")
+
+            wine_data.drop_duplicates(inplace=True)
+
+            wine_data['quality'] = wine_data['quality'].apply(
+                lambda x: 1 if x > 6.5 else 0)
+
+            X = wine_data.iloc[:, :-1].values
+            y = wine_data.iloc[:, -1].values
+
+            X_train, X_test, y_train, y_test = (
+                train_test_split(X, y, test_size=0.2, random_state=42))
+
+            sc = StandardScaler()
+
+            # aplicar escalado estandar
+            X_train = sc.fit_transform(X_train)
+            X_test = sc.fit_transform(X_test)
+
+            clf = DecisionTreeClassifier(
+                criterion='entropy', max_depth=4, random_state=0)
+            clf.fit(X_train, y_train)
+            y_pred = clf.predict(X_test)
+
+            conf_matrix = confusion_matrix(y_test, y_pred)
+            precision = metrics.accuracy_score(y_test, y_pred)
+            f1_score = metrics.f1_score(y_test, y_pred, average='weighted')
+            roc_score = metrics.roc_auc_score(y_test, y_pred)
+            recall_score = metrics.recall_score(
+                y_test, y_pred, average='weighted')
+
+            return jsonify({'message': 'Report generated successfully',
+                            'data': {
+                                'conf_matrix': conf_matrix.tolist(),
+                                'precision': float(precision),
+                                'f1_score': float(f1_score),
+                                'roc_score': float(roc_score),
+                                'recall_score': float(recall_score),
+                                'unique_vals': unique_vals_list,
+                                'good_wines': str(
+                                    wine_data['quality'].value_counts()[1]),
+                                'bad_wines': str(
+                                    wine_data['quality'].value_counts()[0])
+                            }})
 
         except Exception as ex:
             return jsonify({'error': str(ex)})
