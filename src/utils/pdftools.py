@@ -165,8 +165,3 @@ class PdfTools(FPDF):
         if paragraph != '':
             self.set_font('Arial', '', paragraph_size)
             self.multi_cell(0, 10, txt=paragraph, align='J')
-
-
-# pdf = PdfTools(orientation='P', unit='mm', format='A4')
-# pdf.add_page()
-# pdf.output('./src/temp/prueba.pdf')
