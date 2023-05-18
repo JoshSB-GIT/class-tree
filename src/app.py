@@ -16,9 +16,10 @@ app.register_blueprint(mail)
 
 supabase: Client = (
     create_client(config['development'].supabase_url,
-                      config['development'].supabase_key))
+                  config['development'].supabase_key))
 login_manager = LoginManager()
 login_manager.init_app(app)
+
 
 @cross_origin
 @app.route('/')
@@ -42,10 +43,10 @@ def login():
 
         try:
             account = supabase.auth.sign_in_with_password({
-                'email':str(email),
-                'password':str(password)})
+                'email': str(email),
+                'password': str(password)})
             account_dict = account.dict()
-            user = User(id=account_dict['user']['id'], 
+            user = User(id=account_dict['user']['id'],
                         email=account_dict['user']['email'])
             login_user(user)
             response = {'message': 'User Found!',
@@ -76,9 +77,10 @@ def create_user():
                     'status_code': 200}
     except Exception as ex:
         response = {'error': str(ex),
-                        'status_code': 400}
-    
+                    'status_code': 400}
+
     return jsonify(response)
+
 
 @app.route('/logout')
 @login_required
@@ -88,7 +90,7 @@ def logout():
         logout_user()
         supabase.auth.sign_out()
         response = {'message': 'you have successfully logged out!',
-                        'status_code': 200}
+                    'status_code': 200}
     except Exception as ex:
         response = {'error': str(ex),
                     'status_code': 200}
@@ -113,11 +115,12 @@ def id_user_auth():
             response = {'message': 'user not in session',
                         'status_code': 200,
                         'status': False}
-    except:
+    except Exception as ex:
         response = {
             'message': (
                 'An error occurred while trying to extract user information'),
+            'exception': str(ex),
             'status_code': 400,
             'status': False}
-        
+
     return jsonify(response)

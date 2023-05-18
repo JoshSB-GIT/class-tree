@@ -2,15 +2,16 @@ import os
 import random
 import string
 
+
 class FilesTools():
     def generate_file_hash(self, file_name):
         name, extention = os.path.splitext(file_name)
-        
+
         hash = ''.join(
-            random.choices(string.ascii_letters + string.digits, k=30))
-        
+            random.choices(string.ascii_letters + string.digits, k=20))
+
         new_file_name = f"{name}-{hash}{extention}"
-        
+
         return new_file_name
 
 

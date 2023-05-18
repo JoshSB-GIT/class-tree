@@ -7,6 +7,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import confusion_matrix
 from sklearn import metrics
+from sklearn import tree
 
 
 def principal_graph(data_frame, category_cols):
@@ -178,3 +179,9 @@ print("Precisión: ", metrics.accuracy_score(y_test, y_pred))
 print("F1 Record: ", metrics.f1_score(y_test, y_pred, average='weighted'))
 print("Rendimiento: ", metrics.roc_auc_score(y_test, y_pred))
 print("Recall: ", metrics.recall_score(y_test, y_pred, average='weighted'))
+
+plt.figure(figsize=(12, 10))
+_ = tree.plot_tree(
+    clf, feature_names=wine_data.columns[:-1],
+    class_names=['0', '1'], filled=True)
+plt.show()
