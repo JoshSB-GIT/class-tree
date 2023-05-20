@@ -1,27 +1,46 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, make_response, request
 from flask_cors import cross_origin
 from datetime import datetime
 from config.config import config
 from models.emailModel import emailModel
+from supabase import create_client, Client
 from models.userModel import User
 import utils.varsTools as vars
+from utils.validations import Validations
 import yagmail
 
 
 mail = Blueprint('mail', __name__)
-# learningmachine123
-# ufvvcvghcvryxhpl
+
+supabase: Client = create_client(config['development'].supabase_url,
+                                 config['development'].supabase_key)
+
+val = Validations()
 
 
 @cross_origin
 @mail.route('/send_email', methods=['POST'])
 def send_email_to():
     response = {}
+    data = {}
     email_user = request.json['email_user']
     email_to = request.json['email_to']
     subject = request.json['subject']
     email_content = request.json['email_content']
     user_send_contact = request.json['user_send_contact']
+
+    if (type(email_user) != str or type(email_to) != str
+            or type(subject) != str or type(email_content) != str
+            or type(user_send_contact) != bool):
+        return make_response(
+            jsonify(
+                {'message': 'Invalid type data in variables'}), 400)
+
+    if not val.valide_email(email_user) or not val.valide_email(email_to):
+        return make_response(
+            jsonify(
+                {'message': 'Bad email strucure'}), 400)
+
     try:
         user = User(password=config['development'].PASS_EMAIL,
                     email=config['development'].USER_EMAIL)
@@ -41,13 +60,34 @@ def send_email_to():
                             'email': email_user,
                             'email_to': mail.email_to,
                             'subject': mail.subject,
-                            'text': mail.text}
-                        }
+                            'text': mail.text
+                        }}
+
+            data = {
+                'msg': str(email_content),
+                'user_email': str(email_user),
+                'email_to': str(config['development'].USER_EMAIL),
+                'subject': str(subject),
+                'user_send_contact': True
+            }
+
+            supabase.table('contact').insert(data).execute()
+
         else:
             mail = emailModel(email_to=email_to, subject=subject,
                               text=email_content)
             yag = yagmail.SMTP(user=user.email, password=user.password)
             yag.send(email_to, subject, email_content)
+
+            data = {
+                'msg': str(email_content),
+                'user_email': str(email_user),
+                'email_to': str(email_user),
+                'subject': str(subject),
+                'user_send_contact': False
+            }
+
+            supabase.table('contact').insert(data).execute()
 
             response = {'message': 'Email send.',
                         'status_code': 200,

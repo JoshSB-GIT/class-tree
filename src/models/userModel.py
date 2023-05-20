@@ -12,7 +12,7 @@ class User(UserMixin):
 
     def get_email(self):
         return str(self.email)
-    
+
     @property
     def id(self):
         return self._id

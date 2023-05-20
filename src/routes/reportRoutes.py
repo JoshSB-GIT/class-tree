@@ -1,6 +1,7 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+from config.config import config
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.tree import DecisionTreeClassifier
@@ -13,6 +14,7 @@ from utils.filestools import FilesTools
 from utils.pdftools import PdfTools
 import utils.varsTools as vars
 from datetime import datetime
+from supabase import create_client, Client
 import os
 
 plt.switch_backend('agg')
@@ -25,12 +27,23 @@ _path_temp = './src/temp/'
 category_cols = ['volatile acidity', 'citric acid', 'chlorides',
                  'free sulfur dioxide', 'sulphates', 'alcohol']
 
+supabase: Client = create_client(config['development'].supabase_url,
+                                 config['development'].supabase_key)
+
 
 def save_img(name: str) -> str:
     file_name = ''+_filetools.generate_file_hash(name.replace(' ', ''))
     plt.savefig(_path_img+file_name)
     return str(_path_img+file_name+'.png')
 
+
+def save_csv_fbase(data_frame: pd.DataFrame, id_csv: int = 0):
+    datos = data_frame.to_dict(orient='records')
+
+    for dct in datos:
+        dct['csv_id'] = id_csv
+
+    supabase.table('dataset').insert(datos).execute()
 
 # learningmachine123
 # ufvvcvghcvryxhpl
@@ -53,6 +66,10 @@ def generate_pdf_report():
                                     skiprows=0, index_col=False)
 
             wine_data.dropna(inplace=True)
+
+            csv_id = supabase.table('csv').insert(
+                {'name': str(new_filename)}).execute()
+            save_csv_fbase(wine_data, csv_id.dict()['data'][0]['id'])
 
             unique_vals_list = []
             for col in category_cols:
@@ -152,6 +169,21 @@ def generate_pdf_report():
             new_pdf_name = _filetools.generate_file_hash(f'report-{now}.pdf')
             _pdf.output(_path_temp+new_pdf_name)
 
+            data = {
+                'precision': float(precision),
+                'f1score': float(f1_score),
+                'performance': float(roc_score),
+                'recall': float(recall_score),
+                'confusion_matrix': str(conf_matrix.tolist()),
+                'ypred': str(y_pred),
+                'ytest': str(y_test),
+                'goodwine': str(wine_data['quality'].value_counts()[1]),
+                'badwine': str(wine_data['quality'].value_counts()[0]),
+                'csv_id': int(csv_id.dict()['data'][0]['id'])
+            }
+
+            supabase.table("data").insert(data).execute()
+
             return send_file('temp\\'+new_pdf_name, as_attachment=True)
 
         except Exception as ex:
@@ -173,6 +205,23 @@ def generate_report_csv():
             wine_data = pd.read_csv(save_temp,
                                     sep=';', engine='python',
                                     skiprows=0, index_col=False)
+            cantidad_datos = wine_data.count()
+            promedios_datos = wine_data.mean()
+            valores_unicos = wine_data.nunique()
+            advanced_pie_chart = []
+            pie_chart = []
+            bar_unique_graph = []
+            for columna, cantidad in cantidad_datos.items():
+                advanced_pie_chart.append({'name': columna,
+                                           'value': cantidad})
+
+            for columna, promedio in zip(wine_data.columns, promedios_datos):
+                pie_chart.append({'name': columna,
+                                  'value': promedio})
+
+            for columna, valores in zip(wine_data.columns, valores_unicos):
+                bar_unique_graph.append({'name': columna,
+                                        'value': valores})
 
             wine_data.dropna(inplace=True)
 
@@ -222,6 +271,11 @@ def generate_report_csv():
                                     wine_data['quality'].value_counts()[1]),
                                 'bad_wines': str(
                                     wine_data['quality'].value_counts()[0])
+                            },
+                            'graphs': {
+                                'advanced_pie_chart': advanced_pie_chart,
+                                'pie_chart': pie_chart,
+                                'bar_unique_graph': bar_unique_graph
                             }})
 
         except Exception as ex:

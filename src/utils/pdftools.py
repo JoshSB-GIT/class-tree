@@ -204,16 +204,3 @@ class PdfTools(FPDF):
 
             # Establecer la posición del puntero para la siguiente sección
             self.set_xy(table_x, table_y + len(table_data) * cell_height)
-
-
-_pdf = PdfTools(orientation='P', unit='mm', format='A4')
-_pdf.add_page()
-_pdf.section_with_table(
-    'hola que hace',
-    [['hola', 'hola', 'hola', 'hola', 'hola', 'hola', 'hola'],
-     ['hola', 'hola', 'hola', 'hola', 'hola', 'hola', 'hola'],
-     ['hola', 'hola', 'hola', 'hola', 'hola', 'hola', 'hola'],
-     ['hola', 'hola', 'hola', 'hola', 'hola', 'hola', 'hola'],
-     ['hola', 'hola', 'hola', 'hola', 'hola', 'hola', 'hola']]
-)
-_pdf.output('src/temp/prueba.pdf')

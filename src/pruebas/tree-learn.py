@@ -53,6 +53,37 @@ path_file = "./src/pruebas/winequality-red.csv"
 wine_data = pd.read_csv(path_file,
                         sep=';', engine='python',
                         skiprows=0, index_col=False)
+
+cantidad_datos = wine_data.count()
+promedios_datos = wine_data.mean()
+valores_unicos = wine_data.nunique()
+
+advanced_pie_chart = []
+pie_chart = []
+bar_unique_graph = []
+# Imprime la cantidad de datos en cada columna
+print("-------Cantidad de datos por columna-------")
+for columna, cantidad in cantidad_datos.items():
+    advanced_pie_chart.append({'name': columna,
+                               'value': cantidad})
+
+print(advanced_pie_chart)
+print('---------------------------------------------')
+print("-------Promedios de datos por columna-------")
+for columna, promedio in zip(wine_data.columns, promedios_datos):
+    pie_chart.append({'name': columna,
+                      'value': promedio})
+print(pie_chart)
+print('---------------------------------------------')
+
+print("-------unicos de datos por columna-------")
+for columna, valores in zip(wine_data.columns, valores_unicos):
+    bar_unique_graph.append({'name': columna,
+                             'value': valores})
+print(bar_unique_graph)
+print('---------------------------------------------')
+
+
 # Limpiza de datos
 wine_data.shape
 wine_data.dropna(inplace=True)  # <- Elimina las filas con datos vacíos
