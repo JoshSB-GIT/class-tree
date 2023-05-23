@@ -15,4 +15,4 @@ class Response_controller:
 
     # Método para mostrar el resultado de la predicción al usuario
     def mostrar_resultado(self, hipotenusa):
-        return "hypotenuse is: {:.6f}".format(hipotenusa)
+        return "{:.6f}".format(hipotenusa)
