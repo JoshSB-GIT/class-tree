@@ -20,10 +20,10 @@ def list_data():
     try:
         data = supabase.table('data').select('*').execute()
     except Exception as ex:
-        data = {'error': (ex)}
-        make_response(
+        data = {'error': str(ex)}
+        return make_response(
             jsonify(
-                data, 400))
+                data), 400)
 
     return data.dict()
 
@@ -66,10 +66,10 @@ def list_data_id_post():
                 '*').eq('id', id).execute()
             data = data.dict()
         except Exception as ex:
-            data = {'error': (ex)}
-            make_response(
+            data = {'error': str(ex)}
+            return make_response(
                 jsonify(
-                    data, 400))
+                    data), 400)
 
         return data
 
@@ -83,10 +83,10 @@ def list_csv():
             '*').execute()
         data = data.dict()
     except Exception as ex:
-        data = {'error': (ex)}
-        make_response(
+        data = {'error': str(ex)}
+        return make_response(
             jsonify(
-                data, 400))
+                data), 400)
     return data
 
 
@@ -103,10 +103,10 @@ def list_csv_id(id):
             '*').eq('id', id).execute()
         data = data.dict()
     except Exception as ex:
-        data = {'error': (ex)}
-        make_response(
+        data = {'error': str(ex)}
+        return make_response(
             jsonify(
-                data, 400))
+                data), 400)
     return data
 
 
@@ -125,10 +125,10 @@ def list_csv_id_post():
                 '*').eq('id', id).execute()
             data = data.dict()
         except Exception as ex:
-            data = {'error': (ex)}
-            make_response(
+            data = {'error': str(ex)}
+            return make_response(
                 jsonify(
-                    data, 400))
+                    data), 400)
         return data
 
 
@@ -141,10 +141,10 @@ def list_contact():
             '*').eq('state', False).execute()
         data = data.dict()
     except Exception as ex:
-        data = {'error': (ex)}
-        make_response(
+        data = {'error': str(ex)}
+        return make_response(
             jsonify(
-                data, 400))
+                data), 400)
     return data
 
 
@@ -161,10 +161,10 @@ def list_contact_id(id):
             '*').eq('id', id).eq('state', False).execute()
         data = data.dict()
     except Exception as ex:
-        data = {'error': (ex)}
-        make_response(
+        data = {'error': str(ex)}
+        return make_response(
             jsonify(
-                data, 400))
+                data), 400)
     return data
 
 
@@ -183,7 +183,7 @@ def list_contact_id_post():
                 '*').eq('id', id).eq('state', False).execute()
             data = data.dict()
         except Exception as ex:
-            data = {'error': (ex)}
+            data = {'error': str(ex)}
             make_response(
                 jsonify(
                     data, 400))
@@ -199,7 +199,7 @@ def list_dataset():
             '*').execute()
         data = data.dict()
     except Exception as ex:
-        data = {'error': (ex)}
+        data = {'error': str(ex)}
         make_response(
             jsonify(
                 data, 400))
@@ -219,7 +219,7 @@ def list_dataset_id(id):
             '*').eq('id', id).execute()
         data = data.dict()
     except Exception as ex:
-        data = {'error': (ex)}
+        data = {'error': str(ex)}
         make_response(
             jsonify(
                 data, 400))
@@ -241,7 +241,7 @@ def list_dataset_id_post():
                 '*').eq('id', id).execute()
             data = data.dict()
         except Exception as ex:
-            data = {'error': (ex)}
+            data = {'error': str(ex)}
             make_response(
                 jsonify(
                     data, 400))
@@ -262,7 +262,7 @@ def delete_dataset_id():
             data = supabase.table("dataset").delete().eq("id", id).execute()
             data = data.dict()
         except Exception as ex:
-            data = {'error': (ex)}
+            data = {'error': str(ex)}
             make_response(
                 jsonify(
                     data, 400))
@@ -283,7 +283,7 @@ def delete_csv_id():
             data = supabase.table("csv").delete().eq("id", id).execute()
             data = data.dict()
         except Exception as ex:
-            data = {'error': (ex)}
+            data = {'error': str(ex)}
             make_response(
                 jsonify(
                     data, 400))
@@ -304,7 +304,7 @@ def delete_data_id():
             data = supabase.table("data").delete().eq("id", id).execute()
             data = data.dict()
         except Exception as ex:
-            data = {'error': (ex)}
+            data = {'error': str(ex)}
             make_response(
                 jsonify(
                     data, 400))
@@ -325,7 +325,7 @@ def delete_contact_id():
             data = supabase.table("contact").delete().eq("id", id).execute()
             data = data.dict()
         except Exception as ex:
-            data = {'error': (ex)}
+            data = {'error': str(ex)}
             make_response(
                 jsonify(
                     data, 400))
@@ -344,7 +344,7 @@ def delete_dataset_id_get(id):
         data = supabase.table("dataset").delete().eq("id", id).execute()
         data = data.dict()
     except Exception as ex:
-        data = {'error': (ex)}
+        data = {'error': str(ex)}
         make_response(
             jsonify(
                 data, 400))
@@ -363,7 +363,7 @@ def delete_data_id_get(id):
         data = supabase.table("data").delete().eq("id", id).execute()
         data = data.dict()
     except Exception as ex:
-        data = {'error': (ex)}
+        data = {'error': str(ex)}
         make_response(
             jsonify(
                 data, 400))
@@ -382,7 +382,7 @@ def delete_csv_id_get(id):
         data = supabase.table("csv").delete().eq("id", id).execute()
         data = data.dict()
     except Exception as ex:
-        data = {'error': (ex)}
+        data = {'error': str(ex)}
         make_response(
             jsonify(
                 data, 400))
@@ -401,7 +401,7 @@ def delete_contact_id_get(id):
         data = supabase.table("contact").delete().eq("id", id).execute()
         data = data.dict()
     except Exception as ex:
-        data = {'error': (ex)}
+        data = {'error': str(ex)}
         make_response(
             jsonify(
                 data, 400))
@@ -421,7 +421,7 @@ def delete_dataset_csv_id_get(csv_id):
             "csv_id", csv_id).execute()
         data = data.dict()
     except Exception as ex:
-        data = {'error': (ex)}
+        data = {'error': str(ex)}
         make_response(
             jsonify(
                 data, 400))
@@ -440,7 +440,7 @@ def delete_data_csv_id_get(csv_id):
         data = supabase.table("data").delete().eq("csv_id", csv_id).execute()
         data = data.dict()
     except Exception as ex:
-        data = {'error': (ex)}
+        data = {'error': str(ex)}
         make_response(
             jsonify(
                 data, 400))
@@ -462,7 +462,7 @@ def delete_data_csv_id():
                 "csv_id", csv_id).execute()
             data = data.dict()
         except Exception as ex:
-            data = {'error': (ex)}
+            data = {'error': str(ex)}
             make_response(
                 jsonify(
                     data, 400))
@@ -484,7 +484,7 @@ def delete_dataset_csv_id():
                 "csv_id", csv_id).execute()
             data = data.dict()
         except Exception as ex:
-            data = {'error': (ex)}
+            data = {'error': str(ex)}
             make_response(
                 jsonify(
                     data, 400))

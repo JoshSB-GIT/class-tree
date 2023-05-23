@@ -7,7 +7,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import confusion_matrix
 from sklearn import metrics
-from flask import Blueprint, jsonify, request, send_file
+from flask import Blueprint, jsonify, make_response, request, send_file
 from flask_cors import cross_origin
 from flask_login import login_required
 from utils.filestools import FilesTools
@@ -56,7 +56,20 @@ def generate_pdf_report():
     if request.method == 'POST':
         path_temp = './src/temp/'
         try:
+            if 'wine_red' not in request.files:
+                return make_response(
+                    jsonify(
+                        {'message': 'Not file uploaded'}), 400)
             file = request.files['wine_red']
+
+            if file.filename == '':
+                return make_response(
+                    jsonify(
+                        {'message': 'Empty file name'}), 400)
+
+            if len(file.filename) > 20:
+                return make_response(jsonify(
+                    {'message': 'Empty file name'}), 400)
 
             new_filename = _filetools.generate_file_hash(file.filename)
             save_temp = os.path.join(path_temp, new_filename)
@@ -187,7 +200,7 @@ def generate_pdf_report():
             return send_file('temp\\'+new_pdf_name, as_attachment=True)
 
         except Exception as ex:
-            return jsonify({'error': str(ex)})
+            return make_response(jsonify({'error': str(ex)}), 400)
 
 
 @cross_origin
@@ -197,7 +210,20 @@ def generate_report_csv():
     if request.method == 'POST':
         path_temp = './src/temp/'
         try:
+            if 'wine_red' not in request.files:
+                return make_response(
+                    jsonify(
+                        {'message': 'Not file uploaded'}), 400)
             file = request.files['wine_red']
+
+            if file.filename == '':
+                return make_response(
+                    jsonify(
+                        {'message': 'Empty file name'}), 400)
+
+            if len(file.filename) > 20:
+                return make_response(jsonify(
+                    {'message': 'Empty file name'}), 400)
 
             new_filename = _filetools.generate_file_hash(file.filename)
             save_temp = os.path.join(path_temp, new_filename)
@@ -279,4 +305,4 @@ def generate_report_csv():
                             }})
 
         except Exception as ex:
-            return jsonify({'error': str(ex)})
+            return make_response(jsonify({'error': str(ex)}), 400)
