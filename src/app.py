@@ -127,8 +127,8 @@ def logout():
     try:
         logout_user()
         supabase.auth.sign_out()
-        jsonify({'message': 'you have successfully logged out!',
-                 'status_code': 200})
+        return jsonify({'message': 'you have successfully logged out!',
+                        'status_code': 200})
     except Exception as ex:
         return make_response(jsonify({'error': str(ex),
                                       'status_code': 400}), 400)
