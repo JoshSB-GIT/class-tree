@@ -4,7 +4,7 @@ from routes.neuronaRoutes import neuro
 from routes.crudRoutes import crud
 from flask import Flask, jsonify, make_response, request, send_from_directory
 from flask_cors import CORS, cross_origin
-from flask_login import current_user, login_required, login_user, logout_user
+from flask_login import current_user, login_user, logout_user
 from flask_login import LoginManager
 from supabase import create_client, Client
 from config.config import config
@@ -13,7 +13,7 @@ from models.userModel import User
 import os
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True)
 
 app.register_blueprint(csv_report)
 app.register_blueprint(mail)
@@ -41,7 +41,7 @@ def load_user(user_id):
     return User(user_id, "")
 
 
-@cross_origin
+@cross_origin(supports_credentials=True)
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -80,6 +80,8 @@ def login():
             return jsonify({'message': 'User Found!',
                             'email': str(user.email),
                             'id': str(user.id),
+                            'token': str(
+                                account_dict['session']['access_token']),
                             'status_code': 200})
         except Exception as ex:
             return make_response(jsonify({'message': str(ex),
@@ -134,6 +136,7 @@ def logout():
                                       'status_code': 400}), 400)
 
 
+@cross_origin(supports_credentials=True)
 @app.route('/is_auth')
 def id_user_auth():
     response = {}
