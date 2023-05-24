@@ -31,7 +31,7 @@ val = Validations()
 
 @cross_origin
 @app.route('/')
-@login_required
+# @login_required
 def home():
     return jsonify({'message': 'welcome home!'})
 
@@ -87,7 +87,7 @@ def login():
 
 
 @app.route('/create_user', methods=['POST'])
-@login_required
+# @login_required
 def create_user():
     email = request.json['email']
     password = request.json['password']
@@ -122,7 +122,7 @@ def create_user():
 
 
 @app.route('/logout')
-@login_required
+# @login_required
 def logout():
     try:
         logout_user()

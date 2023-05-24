@@ -15,7 +15,7 @@ val = Validations()
 
 @cross_origin
 @crud.route('/list_data', methods=['GET'])
-@login_required
+# @login_required
 def list_data():
     try:
         data = supabase.table('data').select('*').execute()
@@ -30,7 +30,7 @@ def list_data():
 
 @cross_origin
 @crud.route('/list_data/for_id/<id>', methods=['GET'])
-@login_required
+# @login_required
 def list_data_id(id):
 
     if not id:
@@ -53,7 +53,7 @@ def list_data_id(id):
 
 @cross_origin
 @crud.route('/list_data/for_id', methods=['POST'])
-@login_required
+# @login_required
 def list_data_id_post():
     if request.method == 'POST':
         try:
@@ -76,7 +76,7 @@ def list_data_id_post():
 
 @cross_origin
 @crud.route('/list_csv', methods=['GET'])
-@login_required
+# @login_required
 def list_csv():
     try:
         data = supabase.table('csv').select(
@@ -92,7 +92,7 @@ def list_csv():
 
 @cross_origin
 @crud.route('/list_csv/for_id/<id>', methods=['GET'])
-@login_required
+# @login_required
 def list_csv_id(id):
     if not id:
         return make_response(
@@ -112,7 +112,7 @@ def list_csv_id(id):
 
 @cross_origin
 @crud.route('/list_csv/for_id', methods=['POST'])
-@login_required
+# @login_required
 def list_csv_id_post():
     if request.method == 'POST':
         try:
@@ -134,7 +134,7 @@ def list_csv_id_post():
 
 @cross_origin
 @crud.route('/list_contact', methods=['GET'])
-@login_required
+# @login_required
 def list_contact():
     try:
         data = supabase.table('contact').select(
@@ -150,7 +150,7 @@ def list_contact():
 
 @cross_origin
 @crud.route('/list_contact/for_id/<id>', methods=['GET'])
-@login_required
+# @login_required
 def list_contact_id(id):
     if not id:
         return make_response(
@@ -170,7 +170,7 @@ def list_contact_id(id):
 
 @cross_origin
 @crud.route('/list_contact/for_id', methods=['POST'])
-@login_required
+# @login_required
 def list_contact_id_post():
     if request.method == 'POST':
         try:
@@ -192,7 +192,7 @@ def list_contact_id_post():
 
 @cross_origin
 @crud.route('/list_dataset', methods=['GET'])
-@login_required
+# @login_required
 def list_dataset():
     try:
         data = supabase.table('dataset').select(
@@ -208,7 +208,7 @@ def list_dataset():
 
 @cross_origin
 @crud.route('/list_dataset/for_id/<id>', methods=['GET'])
-@login_required
+# @login_required
 def list_dataset_id(id):
     if not id:
         return make_response(
@@ -228,7 +228,7 @@ def list_dataset_id(id):
 
 @cross_origin
 @crud.route('/list_dataset/for_id', methods=['POST'])
-@login_required
+# @login_required
 def list_dataset_id_post():
     if request.method == 'POST':
         try:
@@ -250,7 +250,7 @@ def list_dataset_id_post():
 
 @cross_origin
 @crud.route('/delete_dataset_id/for_id', methods=['POST'])
-@login_required
+# @login_required
 def delete_dataset_id():
     if request.method == 'POST':
         try:
@@ -271,7 +271,7 @@ def delete_dataset_id():
 
 @cross_origin
 @crud.route('/delete_csv_id/for_id', methods=['POST'])
-@login_required
+# @login_required
 def delete_csv_id():
     if request.method == 'POST':
         try:
@@ -292,7 +292,7 @@ def delete_csv_id():
 
 @cross_origin
 @crud.route('/delete_data_id/for_id', methods=['POST'])
-@login_required
+# @login_required
 def delete_data_id():
     if request.method == 'POST':
         try:
@@ -313,7 +313,7 @@ def delete_data_id():
 
 @cross_origin
 @crud.route('/delete_contact_id/for_id', methods=['POST'])
-@login_required
+# @login_required
 def delete_contact_id():
     if request.method == 'POST':
         try:
@@ -334,7 +334,7 @@ def delete_contact_id():
 
 @cross_origin
 @crud.route('/delete_dataset_id/for_id/<id>', methods=['GET'])
-@login_required
+# @login_required
 def delete_dataset_id_get(id):
     try:
         if not id:
@@ -353,7 +353,7 @@ def delete_dataset_id_get(id):
 
 @cross_origin
 @crud.route('/delete_data_id/for_id/<id>', methods=['GET'])
-@login_required
+# @login_required
 def delete_data_id_get(id):
     try:
         if not id:
@@ -372,7 +372,7 @@ def delete_data_id_get(id):
 
 @cross_origin
 @crud.route('/delete_csv_id/for_id/<id>', methods=['GET'])
-@login_required
+# @login_required
 def delete_csv_id_get(id):
     try:
         if not id:
@@ -391,7 +391,7 @@ def delete_csv_id_get(id):
 
 @cross_origin
 @crud.route('/delete_contact_id/for_id/<id>', methods=['GET'])
-@login_required
+# @login_required
 def delete_contact_id_get(id):
     try:
         if not id:
@@ -410,7 +410,7 @@ def delete_contact_id_get(id):
 
 @cross_origin
 @crud.route('/delete_dataset_id/for_csv_id/<csv_id>', methods=['GET'])
-@login_required
+# @login_required
 def delete_dataset_csv_id_get(csv_id):
     try:
         if not csv_id:
@@ -430,7 +430,7 @@ def delete_dataset_csv_id_get(csv_id):
 
 @cross_origin
 @crud.route('/delete_data_id/for_csv_id/<csv_id>', methods=['GET'])
-@login_required
+# @login_required
 def delete_data_csv_id_get(csv_id):
     try:
         if not csv_id:
@@ -449,7 +449,7 @@ def delete_data_csv_id_get(csv_id):
 
 @cross_origin
 @crud.route('/delete_data_id/for_csv_id', methods=['POST'])
-@login_required
+# @login_required
 def delete_data_csv_id():
     if request.method == 'POST':
         try:
@@ -471,7 +471,7 @@ def delete_data_csv_id():
 
 @cross_origin
 @crud.route('/delete_dataset_id/for_csv_id', methods=['POST'])
-@login_required
+# @login_required
 def delete_dataset_csv_id():
     if request.method == 'POST':
         try:

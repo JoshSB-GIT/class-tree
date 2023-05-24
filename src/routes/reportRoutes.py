@@ -51,7 +51,7 @@ def save_csv_fbase(data_frame: pd.DataFrame, id_csv: int = 0):
 
 @cross_origin
 @csv_report.route('/generate_pdf', methods=['POST'])
-@login_required
+# @login_required
 def generate_pdf_report():
     if request.method == 'POST':
         path_temp = './src/temp/'
@@ -205,7 +205,7 @@ def generate_pdf_report():
 
 @cross_origin
 @csv_report.route('/generate_report', methods=['POST'])
-@login_required
+# @login_required
 def generate_report_csv():
     if request.method == 'POST':
         path_temp = './src/temp/'
