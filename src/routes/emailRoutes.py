@@ -104,3 +104,31 @@ def send_email_to():
                     'status_code': 400}
 
     return jsonify(response)
+
+
+@cross_origin
+@mail.route('/update_status/<id>')
+def update_status(id):
+
+    if not id:
+        return make_response(
+            jsonify(
+                {'message': 'Bad id recived'}), 400)
+
+    try:
+        data = supabase.table('contact').select(
+            '*').eq('id', id).execute()
+        data = data.dict()
+        status = data['data'][0]['state']
+        if status:
+            supabase.table('contact').update(
+                {'state': False}).eq('id', id).execute()
+        else:
+            supabase.table('contact').update(
+                {'state': True}).eq('id', id).execute()
+
+        return make_response(
+            jsonify({'message': 'status updated'}), 200)
+    except Exception as ex:
+        return make_response(
+            jsonify({'error': str(ex)}), 400)
