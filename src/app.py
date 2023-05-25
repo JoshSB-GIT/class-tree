@@ -115,9 +115,9 @@ def create_user():
 
         supabase.auth.sign_up({'email': str(user.email),
                                'password': str(user.password)})
-        jsonify({'message': 'User Created!',
-                 'email': str(user.email),
-                 'status_code': 200})
+        return jsonify({'message': 'User Created!',
+                        'email': str(user.email),
+                        'status_code': 200})
     except Exception as ex:
         return make_response(jsonify({'error': str(ex),
                                       'status_code': 400}), 400)
