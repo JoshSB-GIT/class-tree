@@ -297,7 +297,7 @@ def generate_report_csv():
             y_pred = clf.predict(X_test)
 
             plt.clf()
-            plt.figure(figsize=(12, 10))
+            plt.figure(figsize=(32, 30))
             _ = tree.plot_tree(
                 clf, feature_names=wine_data.columns[:-1],
                 class_names=['0', '1'], filled=True)
