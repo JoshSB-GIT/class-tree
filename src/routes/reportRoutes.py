@@ -210,11 +210,11 @@ def generate_report_csv():
     if request.method == 'POST':
         path_temp = './src/temp/'
         try:
-            if 'wine_red' not in request.files:
+            if 'file' not in request.files:
                 return make_response(
                     jsonify(
                         {'message': 'Not file uploaded'}), 400)
-            file = request.files['wine_red']
+            file = request.files['file']
 
             if file.filename == '':
                 return make_response(
@@ -258,6 +258,24 @@ def generate_report_csv():
 
             wine_data.drop_duplicates(inplace=True)
 
+            boxplot_routes = []
+            for col in category_cols:
+                plt.clf()
+                sns.boxplot(data=wine_data[col], orient='h')
+                plt.title(col)
+                boxplot_routes.append(
+                    save_img('boxplot-'+str(col)).replace(
+                        './src/assets/img/', 'http://127.0.0.1:5000/img/'))
+
+            bargraph_routes = []
+
+            for col in category_cols:
+                plt.clf()
+                plt.figure(figsize=(10, 6))
+                sns.barplot(x='quality', y=col, data=wine_data)
+                bargraph_routes.append(save_img('bar_graph-'+str(col)).replace(
+                    './src/assets/img/', 'http://127.0.0.1:5000/img/'))
+
             wine_data['quality'] = wine_data['quality'].apply(
                 lambda x: 1 if x > 6.5 else 0)
 
@@ -297,6 +315,10 @@ def generate_report_csv():
                                     wine_data['quality'].value_counts()[1]),
                                 'bad_wines': str(
                                     wine_data['quality'].value_counts()[0])
+                            },
+                            'img_graph': {
+                                'boxplot_routes': list(boxplot_routes),
+                                'bargraph_routes': list(bargraph_routes)
                             },
                             'graphs': {
                                 'advanced_pie_chart': advanced_pie_chart,

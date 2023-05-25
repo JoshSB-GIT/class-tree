@@ -54,6 +54,7 @@ def send_email_to():
                 email_user, 'Lo hemos recibido...',
                 str(vars.email_we_to_user).format(
                     str(datetime.now().date()), str(datetime.now().time())))
+
             response = {'message': 'Email received',
                         'status_code': 200,
                         'data': {
