@@ -84,6 +84,7 @@ def send_email_to():
                 'user_email': str(email_user),
                 'email_to': str(email_user),
                 'subject': str(subject),
+                'state': True,
                 'user_send_contact': False
             }
 
