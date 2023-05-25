@@ -9,7 +9,7 @@ from sklearn.metrics import confusion_matrix
 from sklearn import metrics
 from flask import Blueprint, jsonify, make_response, request, send_file
 from flask_cors import cross_origin
-from flask_login import login_required
+from sklearn import tree
 from utils.filestools import FilesTools
 from utils.pdftools import PdfTools
 import utils.varsTools as vars
@@ -101,7 +101,7 @@ def generate_pdf_report():
             bargraph_routes = []
 
             for col in category_cols:
-                plt.clf()
+
                 plt.figure(figsize=(10, 6))
                 sns.barplot(x='quality', y=col, data=wine_data)
                 bargraph_routes.append(save_img('bar_graph-'+str(col)))
@@ -296,6 +296,20 @@ def generate_report_csv():
             clf.fit(X_train, y_train)
             y_pred = clf.predict(X_test)
 
+            plt.clf()
+            plt.figure(figsize=(12, 10))
+            _ = tree.plot_tree(
+                clf, feature_names=wine_data.columns[:-1],
+                class_names=['0', '1'], filled=True)
+            name_tree = save_img('tree_class-').replace(
+                './src/assets/img/', 'http://127.0.0.1:5000/img/')
+
+            plt.clf()
+            plt.figure(figsize=(10, 6))
+            sns.countplot(x=wine_data['quality'])
+            img_class = (save_img('bar_graph-'+'quality').replace(
+                './src/assets/img/', 'http://127.0.0.1:5000/img/'))
+
             conf_matrix = confusion_matrix(y_test, y_pred)
             precision = metrics.accuracy_score(y_test, y_pred)
             f1_score = metrics.f1_score(y_test, y_pred, average='weighted')
@@ -324,7 +338,9 @@ def generate_report_csv():
                                 'advanced_pie_chart': advanced_pie_chart,
                                 'pie_chart': pie_chart,
                                 'bar_unique_graph': bar_unique_graph
-                            }})
+                            },
+                            'tree': str(name_tree),
+                            'img_class': str(img_class)})
 
         except Exception as ex:
             return make_response(jsonify({'error': str(ex)}), 400)

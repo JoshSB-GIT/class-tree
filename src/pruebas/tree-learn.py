@@ -152,6 +152,7 @@ print(
     '------------------------------------------------------')
 
 # graficar los nuevos valores para quality
+print('HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAa')
 bar_simple_graph(wine_data, 'quality')
 
 X = wine_data.iloc[:, :-1].values
